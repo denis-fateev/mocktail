@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Mocktail",
+  "description": "Mocktail mocks API responses and modifies outgoing requests directly in the browser with per-tab activation.",
+  "version": "1.0.0",
+  "minimum_chrome_version": "114",
+  "action": {
+    "default_title": "Mocktail",
+    "default_icon": {
+      "16": "mocktail_icon.png",
+      "32": "mocktail_icon.png",
+      "48": "mocktail_icon.png",
+      "128": "mocktail_icon.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "permissions": ["debugger", "sidePanel", "storage", "tabs"],
+  "icons": {
+    "16": "mocktail_icon.png",
+    "32": "mocktail_icon.png",
+    "48": "mocktail_icon.png",
+    "128": "mocktail_icon.png"
+  }
+}

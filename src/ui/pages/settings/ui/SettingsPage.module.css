@@ -1,0 +1,97 @@
+.page {
+  padding: 4px 0;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list > li + li {
+  margin-top: 8px;
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.setting:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.setting:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.settingText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.settingLabel {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.settingDescription {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.toggleTrack {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-primary-500);
+  transition: background 0.15s ease;
+}
+
+.setting[aria-checked='false'] .toggleTrack {
+  background: var(--color-border-input);
+}
+
+.setting[aria-checked='false'] .toggleThumb {
+  right: auto;
+  left: 2px;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  transition: left 0.15s ease, right 0.15s ease;
+}
+
+.error {
+  margin: 12px 0 0;
+  color: var(--color-danger);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}

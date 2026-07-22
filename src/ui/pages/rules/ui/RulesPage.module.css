@@ -1,0 +1,201 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.stickyHeader {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  padding-bottom: 8px;
+  background: var(--color-bg-page);
+  box-shadow: 0 1px 0 var(--color-border);
+  --toolbar-control-height: 34px;
+}
+
+.headerControls {
+  padding-inline: 2px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.searchInput {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.toolbarActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.addRuleButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  height: var(--toolbar-control-height);
+  margin: 0;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-600);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.addRuleButton:hover:not(:disabled) {
+  background: var(--color-primary-700);
+}
+
+.addRuleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.iconButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--toolbar-control-height);
+  height: var(--toolbar-control-height);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.iconButton:hover:not(:disabled) {
+  border-color: var(--color-hover-border);
+  background: var(--color-hover-bg);
+  color: var(--color-hover-text);
+}
+
+.iconButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scrollBody {
+  flex: 1;
+  min-height: 0;
+  padding: 8px 2px 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.empty {
+  margin: 0 0 12px;
+  padding: 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  text-align: center;
+}
+
+.emptyText {
+  margin: 0 0 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.emptyPrimaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-600);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.emptyPrimaryButton:hover:not(:disabled) {
+  background: var(--color-primary-700);
+}
+
+.emptyPrimaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.emptyLinkButton {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-primary-600);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.emptyLinkButton:hover {
+  border-color: var(--color-hover-border);
+  background: var(--color-hover-bg);
+}
+
+.list {
+  display: grid;
+  grid-template-columns:
+    24px
+    48px
+    minmax(0, 1fr)
+    minmax(0, max-content)
+    max-content;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: var(--color-danger);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+@container panel (max-width: 360px) {
+  .list {
+    grid-template-columns:
+      24px
+      40px
+      minmax(0, 1fr)
+      minmax(0, max-content)
+      max-content;
+  }
+}

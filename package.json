@@ -1,0 +1,62 @@
+{
+  "name": "mocktail",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension for mocking API responses and modifying requests per tab.",
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "package": "node ./scripts/package.mjs",
+    "dev": "node ./scripts/dev.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "screenshots": "node ./docs/store-screenshots/capture.mjs"
+  },
+  "keywords": [
+    "chrome-extension",
+    "manifest-v3",
+    "mocking",
+    "developer-tools",
+    "api",
+    "side-panel"
+  ],
+  "author": "Denis Fateev <denisprof2@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lint": "^6.9.7",
+    "@uiw/react-codemirror": "^4.25.10",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/chrome": "^0.1.29",
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "esbuild": "^0.25.11",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.4.0",
+    "jsdom": "^27.0.1",
+    "playwright": "^1.61.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.12",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,84 @@
+.default {
+  margin-bottom: 0;
+}
+
+.banner {
+  margin-bottom: 10px;
+}
+
+.startButton,
+.stopButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.banner .startButton,
+.banner .stopButton {
+  padding: clamp(10px, 2.5cqi, 12px) clamp(12px, 3cqi, 16px);
+  font-size: clamp(13px, 3.2cqi, 14px);
+}
+
+.default .startButton,
+.default .stopButton {
+  margin-bottom: 12px;
+  padding: clamp(8px, 2cqi, 10px) clamp(10px, 2.5cqi, 14px);
+  font-size: clamp(13px, 3.2cqi, 14px);
+}
+
+.startButton {
+  background: var(--color-primary-600);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.startButton:hover:not(:disabled) {
+  background: var(--color-primary-700);
+}
+
+.stopButton {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: var(--color-danger-border);
+}
+
+.stopButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-danger) 72%, #fff);
+  border-color: color-mix(in srgb, var(--color-danger) 72%, #fff);
+  color: #fff;
+}
+
+.stopButton:active:not(:disabled) {
+  background: color-mix(in srgb, var(--color-danger) 82%, #fff);
+  border-color: color-mix(in srgb, var(--color-danger) 82%, #fff);
+  color: #fff;
+}
+
+.startButton:disabled,
+.stopButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  flex-shrink: 0;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: var(--color-danger);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.default .error {
+  margin: 0 0 8px;
+}

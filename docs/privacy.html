@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mocktail — Privacy Policy</title>
+    <meta
+      name="description"
+      content="Privacy Policy for Mocktail, a Chrome extension for mocking API responses locally."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f5f1;
+        --ink: #1c1917;
+        --muted: #57534e;
+        --line: #d6d3d1;
+        --accent: #0f766e;
+        --code-bg: #ebe7e0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+        background:
+          radial-gradient(ellipse 80% 50% at 10% -10%, #d9efe9 0%, transparent 55%),
+          radial-gradient(ellipse 70% 40% at 100% 0%, #efe6d8 0%, transparent 50%),
+          var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+      }
+
+      h1 {
+        margin: 0 0 0.35rem;
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .updated {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      h2 {
+        margin: 2rem 0 0.75rem;
+        font-size: 1.2rem;
+        letter-spacing: -0.01em;
+      }
+
+      p,
+      li {
+        color: var(--ink);
+      }
+
+      p {
+        margin: 0 0 0.9rem;
+      }
+
+      ul {
+        margin: 0 0 0.9rem;
+        padding-left: 1.2rem;
+      }
+
+      li {
+        margin-bottom: 0.35rem;
+      }
+
+      strong {
+        font-weight: 600;
+      }
+
+      code {
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 0.9em;
+        background: var(--code-bg);
+        padding: 0.1em 0.35em;
+        border-radius: 0.25rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.5rem 0 1rem;
+        font-size: 0.95rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.65rem 0.75rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      a:hover {
+        text-decoration-thickness: 2px;
+      }
+
+      .repo {
+        margin-top: 2.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Privacy Policy</h1>
+      <p class="updated"><strong>Last updated:</strong> 2026-07-21</p>
+
+      <p>
+        Mocktail is a local developer tool. It does not operate a backend that receives your browsing or
+        network data.
+      </p>
+
+      <h2>What Mocktail does</h2>
+      <p>
+        When you <strong>enable mocking on a tab</strong>, the extension attaches to that tab using the
+        Chrome Debugger API and may:
+      </p>
+      <ul>
+        <li>Observe request URL, method, and related network metadata for matching and the Requests list</li>
+        <li>
+          Optionally store response bodies and headers (controlled by
+          <strong>Capture response bodies and headers</strong> in Settings)
+        </li>
+        <li>Apply your mock rules (status, body, headers, delay) or modify outgoing request headers</li>
+      </ul>
+      <p>When mocking is <strong>disabled</strong>, Mocktail does not intercept that tab’s network traffic.</p>
+
+      <h2>What is stored locally</h2>
+      <p>
+        Depending on your usage and settings, Mocktail may store in Chrome extension storage (on your
+        device):
+      </p>
+      <ul>
+        <li>Mock rules and rule sets</li>
+        <li>App settings</li>
+        <li>Which tabs have mocking enabled (session restore behavior)</li>
+        <li>
+          Captured request history shown in the Requests UI (subject to settings such as clearing on
+          reload)
+        </li>
+      </ul>
+      <p>
+        This data stays in your browser profile unless you export rule sets yourself (for example,
+        copying JSON to another tool).
+      </p>
+
+      <h2>What Mocktail does not do</h2>
+      <ul>
+        <li>
+          It does <strong>not</strong> upload intercepted requests, responses, or rule contents to
+          Mocktail servers (there are none in this project)
+        </li>
+        <li>
+          It does <strong>not</strong> use analytics or advertising SDKs in the extension code shipped
+          from this repository
+        </li>
+        <li>It does <strong>not</strong> sell personal data</li>
+      </ul>
+
+      <h2>Sensitive environments</h2>
+      <p>
+        Mocking can expose or rewrite traffic on the tab where it is enabled. For maximum safety, avoid
+        using Mocktail on production accounts or pages that handle real secrets, payments, or personal
+        data you are not prepared to see in a local log.
+      </p>
+
+      <h2>Permissions (summary)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Permission</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>debugger</code></td>
+            <td>Attach to a tab and intercept/fulfill or continue requests via CDP</td>
+          </tr>
+          <tr>
+            <td><code>sidePanel</code></td>
+            <td>Host the primary UI</td>
+          </tr>
+          <tr>
+            <td><code>storage</code></td>
+            <td>Persist rules, settings, and related local state</td>
+          </tr>
+          <tr>
+            <td><code>tabs</code></td>
+            <td>Know which tab is active for per-tab enablement and the side panel</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Contact</h2>
+      <p>
+        For privacy questions, open a
+        <a href="https://github.com/denis-fateev/mocktail/issues">GitHub issue</a>
+        or email
+        <a href="mailto:denisprof2@gmail.com">denisprof2@gmail.com</a>.
+      </p>
+
+      <p class="repo">
+        Source:
+        <a href="https://github.com/denis-fateev/mocktail">github.com/denis-fateev/mocktail</a>
+      </p>
+    </main>
+  </body>
+</html>

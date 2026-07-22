@@ -1,0 +1,348 @@
+.card {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  gap: 0 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+}
+
+.cardMenuOpen {
+  z-index: 20;
+}
+
+.cardHighlighted {
+  animation: ruleHighlight 1.2s ease-out forwards;
+}
+
+@keyframes ruleHighlight {
+  0%,
+  42% {
+    border-color: #d4a017;
+    background-color: #fffbeb;
+    box-shadow:
+      0 0 0 2px rgb(212 160 23 / 0.4),
+      0 0 20px rgb(212 160 23 / 0.28);
+  }
+
+  100% {
+    border-color: var(--color-border);
+    background-color: var(--color-bg-surface);
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardHighlighted {
+    animation: none;
+    border-color: #d4a017;
+    box-shadow: 0 0 0 2px rgb(212 160 23 / 0.4);
+  }
+}
+
+.cardInactive .expandCell,
+.cardInactive .methodBadge,
+.cardInactive .urlCell,
+.cardInactive .callCount,
+.cardInactive .toggleCell,
+.cardInactive .menuButton,
+.cardInactive .body {
+  opacity: var(--opacity-inactive);
+  transition: opacity 0.15s ease;
+}
+
+.headerRow {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  gap: 0 8px;
+  align-items: center;
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-bg-muted);
+}
+
+.configRow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+  min-width: 0;
+}
+
+.configRowRequest {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@container panel (max-width: 360px) {
+  .configRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.expandCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.actionsCell {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  justify-self: end;
+  min-width: 0;
+}
+
+.toggleCell,
+.menuCell {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.expandButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.expandButton:hover {
+  color: var(--color-text);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+  background: var(--color-bg-muted);
+}
+
+.chevronExpanded,
+.chevronCollapsed {
+  display: block;
+  transition: transform 0.15s ease;
+}
+
+.chevronCollapsed {
+  transform: rotate(-90deg);
+}
+
+.methodBadge {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: calc(1.2 * 11px + 8px);
+  padding: 4px 0;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.methodBadgeOptions {
+  font-size: 8px;
+  letter-spacing: 0;
+}
+
+.urlCell {
+  min-width: 0;
+}
+
+.urlCellExpanded {
+  grid-column: 2 / 4;
+}
+
+.urlInput {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  overflow-x: auto;
+}
+
+.urlInput::placeholder {
+  color: #9ca3af;
+}
+
+.urlInput:focus {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 0;
+  border-color: var(--color-focus-border);
+}
+
+.urlInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.callCount {
+  flex-shrink: 0;
+  justify-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--color-bg-muted);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.toggle {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.toggleTrack {
+  position: relative;
+  display: block;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-primary-500);
+}
+
+.toggle[aria-checked='false'] .toggleTrack {
+  background: var(--color-border-input);
+}
+
+.toggle[aria-checked='false'] .toggleThumb {
+  right: auto;
+  left: 2px;
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  transition: left 0.15s ease, right 0.15s ease;
+}
+
+.menuCell {
+  position: relative;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.menuButton:hover,
+.menuButton[aria-expanded='true'] {
+  color: var(--color-text);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+  background: var(--color-bg-muted);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 30;
+  min-width: 160px;
+  padding: 4px 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.menuItem,
+.menuItemDanger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menuItemIcon {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.menuItem:hover {
+  background: var(--color-bg-subtle);
+}
+
+.menuItemDanger {
+  color: var(--color-danger);
+}
+
+.menuItemDanger:hover {
+  background: var(--color-danger-bg);
+}
+
+.menuDivider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--color-border);
+}

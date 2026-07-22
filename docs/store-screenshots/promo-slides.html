@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mocktail — Store screenshots</title>
+    <style>
+      :root {
+        --primary-50: #eff6ff;
+        --primary-100: #dbeafe;
+        --primary-300: #93c5fd;
+        --primary-500: #3b82f6;
+        --primary-600: #2563eb;
+        --primary-700: #1d4ed8;
+        --text: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+        --border: #e5e7eb;
+        --border-input: #d1d5db;
+        --bg-page: #f0f0f0;
+        --bg-surface: #fff;
+        --bg-subtle: #f9fafb;
+        --bg-muted: #f3f4f6;
+        --bg-tab-bar: #e5e7eb;
+        --success: #15803d;
+        --success-bg: #dcfce7;
+        --danger: #dc2626;
+        --danger-bg: #fef2f2;
+        --danger-border: #fca5a5;
+        --warning: #c2410c;
+        --warning-bg: #ffedd5;
+        --accent: #ea580c;
+        --accent-soft: #fff7ed;
+        --footer: #3a3a3a;
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: #222;
+        color: var(--text);
+      }
+
+      .slide {
+        position: relative;
+        width: 1280px;
+        height: 800px;
+        margin: 0 auto 24px;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 90% 70% at 50% 35%, #f7f7f7 0%, #e4e4e4 55%, #d8d8d8 100%);
+      }
+
+      .slide-body {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 0;
+        padding: 24px 40px;
+      }
+
+      .slide-body.hero-only {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 0;
+      }
+
+      .panel-wrap {
+        position: relative;
+        width: 420px;
+      }
+
+      .panel {
+        width: 420px;
+        height: 560px;
+        padding: 14px;
+        border-radius: 12px;
+        background: var(--bg-page);
+        box-shadow:
+          0 24px 48px rgb(0 0 0 / 0.18),
+          0 8px 16px rgb(0 0 0 / 0.08),
+          0 0 0 1px rgb(0 0 0 / 0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        margin-bottom: 12px;
+        border-radius: var(--radius-lg);
+        background: var(--bg-tab-bar);
+        flex-shrink: 0;
+      }
+
+      .tab {
+        flex: 1;
+        padding: 8px 10px;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        background: transparent;
+        color: var(--text-secondary);
+      }
+
+      .tab.active {
+        background: var(--bg-surface);
+        color: var(--text);
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+      }
+
+      .stop-btn,
+      .start-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 11px 14px;
+        margin-bottom: 10px;
+        border-radius: var(--radius-md);
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid transparent;
+      }
+
+      .start-btn {
+        background: var(--primary-600);
+        color: #fff;
+      }
+
+      .stop-btn {
+        background: var(--danger-bg);
+        color: var(--danger);
+        border-color: var(--danger-border);
+      }
+
+      .field-caption {
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .select,
+      .input,
+      .search {
+        width: 100%;
+        padding: 7px 10px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+      }
+
+      .grow {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        flex-shrink: 0;
+      }
+
+      .primary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 34px;
+        padding: 0 10px;
+        border: none;
+        border-radius: var(--radius-md);
+        background: var(--primary-600);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .ghost-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 6px;
+        align-items: flex-end;
+        margin-top: 8px;
+      }
+
+      .scroll {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .card {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--bg-surface);
+      }
+
+      .card + .card {
+        margin-top: 10px;
+      }
+
+      .card-head {
+        display: grid;
+        grid-template-columns: 24px 48px minmax(0, 1fr) auto auto;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .chev {
+        width: 22px;
+        height: 22px;
+        display: grid;
+        place-items: center;
+        color: var(--text-muted);
+      }
+
+      .method {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 22px;
+        padding: 4px 0;
+        border-radius: var(--radius-sm);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        background: var(--primary-100);
+        color: var(--primary-700);
+      }
+
+      .method.post {
+        background: var(--success-bg);
+        color: var(--success);
+      }
+
+      .calls {
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: var(--bg-muted);
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .toggle {
+        width: 36px;
+        height: 20px;
+        border-radius: 999px;
+        background: var(--primary-500);
+        position: relative;
+      }
+
+      .toggle::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+      }
+
+      .card-body {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--bg-muted);
+      }
+
+      .config {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .config-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .label {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .label span {
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .label .box {
+        padding: 7px 8px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .response-panel {
+        margin-top: 12px;
+        height: 220px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--bg-surface);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .resp-tabs {
+        display: flex;
+        gap: 2px;
+        padding: 0 8px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-subtle);
+      }
+
+      .resp-tab {
+        padding: 8px 12px;
+        border: none;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .resp-tab.active {
+        border-bottom-color: var(--primary-500);
+        color: var(--primary-600);
+      }
+
+      .code {
+        flex: 1;
+        margin: 0;
+        padding: 10px 12px;
+        background: #fff;
+        color: #111827;
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.55;
+        overflow: hidden;
+        border-top: 1px solid var(--border);
+      }
+
+      .code .k {
+        color: #0550ae;
+      }
+      .code .s {
+        color: #0a3069;
+      }
+      .code .n {
+        color: #0550ae;
+      }
+      .code .p {
+        color: #24292f;
+      }
+
+      .req-body {
+        margin: 4px 0 0;
+        padding: 6px 8px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--bg-subtle);
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 10px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+      }
+
+      .section-label {
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .full-url {
+        margin: 0;
+        padding: 6px 8px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--bg-subtle);
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 10px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .transfer {
+        margin-top: 10px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--bg-surface);
+        overflow: hidden;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .transfer-tabs {
+        display: flex;
+        gap: 2px;
+        padding: 0 8px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-subtle);
+      }
+
+      .transfer-body {
+        padding: 10px;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .transfer-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .transfer-json {
+        flex: 1;
+        margin: 0;
+        padding: 8px 10px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-subtle);
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 11px;
+        line-height: 1.45;
+        overflow: hidden;
+        white-space: pre;
+      }
+
+      .headers {
+        flex: 1;
+        padding: 8px;
+        overflow: hidden;
+      }
+
+      .hrow {
+        display: grid;
+        grid-template-columns: 18px 1fr 1.2fr 22px;
+        gap: 6px;
+        align-items: center;
+        padding: 6px;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+      }
+
+      .hrow input[type='checkbox'] {
+        width: 14px;
+        height: 14px;
+        accent-color: var(--primary-600);
+      }
+
+      .req-list {
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        overflow: hidden;
+      }
+
+      .req-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+      }
+
+      .req-item:nth-child(even) {
+        background: #f7f8fa;
+      }
+
+      .req-item.hot {
+        background: var(--primary-50);
+        box-shadow: inset 3px 0 0 var(--primary-500);
+      }
+
+      .req-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .req-meta {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .badge {
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .badge.ok {
+        background: var(--success-bg);
+        color: var(--success);
+      }
+
+      .badge.mocked {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .badge.mod {
+        background: var(--primary-100);
+        color: var(--primary-700);
+      }
+
+      .mock-btn {
+        padding: 3px 8px;
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-sm);
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .url {
+        color: var(--text-secondary);
+        font-family: var(--mono);
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .settings-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .setting {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--bg-surface);
+      }
+
+      .setting h3 {
+        margin: 0 0 4px;
+        font-size: 13px;
+      }
+
+      .setting p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .hero-layout {
+        display: flex;
+        align-items: center;
+        gap: 56px;
+      }
+
+      .hero-brand {
+        box-sizing: border-box;
+        width: 460px;
+        height: 410px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 12px 0 20px;
+        text-align: left;
+      }
+
+      .hero-icon {
+        width: 150px;
+        height: 150px;
+        margin: 0;
+        filter: drop-shadow(0 18px 36px rgb(0 0 0 / 0.24));
+      }
+
+      .hero-brand h1 {
+        margin: 0;
+        font-size: 80px;
+        letter-spacing: -0.05em;
+        line-height: 0.95;
+      }
+
+      .hero-brand p {
+        margin: 0;
+        max-width: 440px;
+        color: var(--text-secondary);
+        font-size: 28px;
+        line-height: 1.35;
+      }
+
+      .hero-panel {
+        width: 460px;
+        height: 560px;
+        padding: 14px;
+      }
+
+
+      .anno {
+        position: relative;
+        flex: 0 0 250px;
+        max-width: 250px;
+        color: var(--text);
+        font-size: 19px;
+        line-height: 1.4;
+        font-weight: 550;
+      }
+
+      .anno-stack {
+        flex: 0 0 250px;
+        max-width: 250px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .anno-stack .anno {
+        flex: none;
+        max-width: none;
+      }
+
+      .anno b {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .anno::before {
+        content: '';
+        position: absolute;
+        background: var(--accent);
+      }
+
+      .anno.left::before {
+        left: -12px;
+        top: 2px;
+        bottom: 2px;
+        width: 4px;
+      }
+
+      .anno.right::before {
+        right: -12px;
+        top: 2px;
+        bottom: 2px;
+        width: 4px;
+      }
+
+      .anno.steps {
+        max-width: 250px;
+      }
+
+      .anno.steps ol {
+        margin: 0;
+        padding-left: 22px;
+      }
+
+      .anno.steps li {
+        margin-bottom: 12px;
+      }
+
+      .anno.steps li:last-child {
+        margin-bottom: 0;
+      }
+
+      .callout {
+        position: absolute;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: var(--accent-soft);
+        border: 1px solid #fdba74;
+        color: #9a3412;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+        white-space: nowrap;
+      }
+
+      .callout::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: inherit;
+        border-right: 1px solid #fdba74;
+        border-bottom: 1px solid #fdba74;
+        transform: rotate(45deg);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. Hero / overview -->
+    <section class="slide" id="slide-01-hero">
+      <div class="slide-body hero-only">
+        <div class="hero-layout">
+          <div class="hero-brand">
+            <img class="hero-icon" src="./mocktail_icon.png" alt="" />
+            <h1>Mocktail</h1>
+            <p>Mock API responses and modify outgoing requests — per tab, right in the browser.</p>
+          </div>
+          <div class="panel hero-panel">
+            <div class="tabs">
+              <div class="tab active">Rules (1)</div>
+              <div class="tab">Requests</div>
+              <div class="tab">Settings</div>
+              <div class="tab">About</div>
+            </div>
+            <div class="start-btn">▶ Start mocking</div>
+            <div class="scroll" style="margin-top: 0">
+              <div class="card">
+                <div class="card-head">
+                  <div class="chev">▾</div>
+                  <div class="method">GET</div>
+                  <div class="input" style="padding: 6px 8px; font-size: 12px">/api/users</div>
+                  <div class="calls">12 calls</div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="card-body">
+                  <div class="config">
+                    <div class="label"><span>Match</span><div class="box">Contains</div></div>
+                    <div class="label"><span>Method</span><div class="box">GET</div></div>
+                    <div class="label"><span>Modify</span><div class="box">Response</div></div>
+                    <div class="label"><span>Status</span><div class="box">200</div></div>
+                    <div class="label"><span>Delay</span><div class="box">0 ms</div></div>
+                  </div>
+                  <div class="response-panel" style="height: 180px">
+                    <div class="resp-tabs">
+                      <div class="resp-tab active">{ } Response JSON</div>
+                      <div class="resp-tab">Headers</div>
+                    </div>
+                    <pre class="code"><span class="p">{</span>
+  <span class="k">"users"</span><span class="p">: [</span>
+    <span class="p">{</span> <span class="k">"id"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span> <span class="k">"name"</span><span class="p">:</span> <span class="s">"Ada"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="k">"id"</span><span class="p">:</span> <span class="n">2</span><span class="p">,</span> <span class="k">"name"</span><span class="p">:</span> <span class="s">"Grace"</span> <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="k">"total"</span><span class="p">:</span> <span class="n">2</span>
+<span class="p">}</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Response mocks / Rules -->
+    <section class="slide" id="slide-02-response">
+      <div class="slide-body">
+        <div class="anno left">
+          Change <b>status</b>, <b>delay</b>, response <b>JSON</b> (HTML, other text formats), and <b>headers</b> — no code required.
+        </div>
+        <div class="panel-wrap" style="width: 460px">
+          <div class="panel" style="width: 460px; height: 600px">
+            <div class="tabs">
+              <div class="tab active">Rules (1)</div>
+              <div class="tab">Requests</div>
+              <div class="tab">Settings</div>
+              <div class="tab">About</div>
+            </div>
+            <div class="stop-btn">■ Stop mocking</div>
+            <div class="scroll" style="margin-top: 0">
+              <div class="card">
+                <div class="card-head" style="grid-template-columns: 24px 48px minmax(0, 1fr) auto auto">
+                  <div class="chev">▾</div>
+                  <div class="method">GET</div>
+                  <div class="input" style="padding: 6px 8px; font-size: 12px">/api/users</div>
+                  <div class="calls">12 calls</div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="card-body">
+                  <div class="config">
+                    <div class="label"><span>Match</span><div class="box">Contains</div></div>
+                    <div class="label"><span>Method</span><div class="box">GET</div></div>
+                    <div class="label"><span>Modify</span><div class="box">Response</div></div>
+                    <div class="label"><span>Status</span><div class="box">200</div></div>
+                    <div class="label"><span>Delay</span><div class="box">350 ms</div></div>
+                  </div>
+                  <div class="response-panel">
+                    <div class="resp-tabs">
+                      <div class="resp-tab active">{ } Response JSON</div>
+                      <div class="resp-tab">Headers <span class="badge" style="background: var(--primary-100); color: var(--primary-600)">3</span></div>
+                    </div>
+                    <pre class="code"><span class="p">{</span>
+  <span class="k">"users"</span><span class="p">: [</span>
+    <span class="p">{</span> <span class="k">"id"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span> <span class="k">"name"</span><span class="p">:</span> <span class="s">"Ada"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="k">"id"</span><span class="p">:</span> <span class="n">2</span><span class="p">,</span> <span class="k">"name"</span><span class="p">:</span> <span class="s">"Grace"</span> <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="k">"total"</span><span class="p">:</span> <span class="n">2</span>
+<span class="p">}</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="anno-stack">
+          <div class="anno right">
+            Match by <b>URL</b> (equals / contains / starts / ends) and <b>HTTP method</b>.
+          </div>
+          <div class="anno right">
+            Simulate slow networks with a response <b>delay</b>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Requests → rules -->
+    <section class="slide" id="slide-03-requests">
+      <div class="slide-body">
+        <div class="anno left steps">
+          <ol>
+            <li>Enable mocking and <b>trigger requests</b></li>
+            <li>Open the <b>Requests</b> tab</li>
+            <li><b>Search</b> by URL</li>
+            <li>Click <b>Mock</b> to create a rule</li>
+          </ol>
+        </div>
+        <div class="panel-wrap">
+          <div class="panel">
+            <div class="tabs">
+              <div class="tab">Rules (2)</div>
+              <div class="tab active">Requests</div>
+              <div class="tab">Settings</div>
+              <div class="tab">About</div>
+            </div>
+            <div class="stop-btn">■ Stop mocking</div>
+            <div class="toolbar" style="margin-top: 0; margin-bottom: 8px">
+              <div class="grow"><div class="search">/api/users</div></div>
+              <div class="ghost-btn">Clear</div>
+            </div>
+            <div class="req-list scroll">
+              <div class="req-item hot">
+                <div class="req-top">
+                  <div class="req-meta">
+                    <span class="method" style="min-width: 3.4em; padding: 2px 6px">GET</span>
+                    <span class="badge ok">200</span>
+                    <span class="badge mocked">MOCKED</span>
+                  </div>
+                  <span class="mock-btn">Mock</span>
+                </div>
+                <div class="url">https://api.example.com/api/users?page=1</div>
+                <div style="display: grid; gap: 6px; margin-top: 4px">
+                  <div style="display: flex; justify-content: space-between; align-items: center">
+                    <span class="section-label">Full URL</span>
+                    <span style="font-size: 10px; font-weight: 600; color: var(--text-muted)">Copy URL</span>
+                  </div>
+                  <p class="full-url">https://api.example.com/api/users?page=1</p>
+                  <div style="display: flex; justify-content: space-between; align-items: center">
+                    <span class="section-label">Response body</span>
+                    <span style="font-size: 10px; font-weight: 600; color: var(--text-muted)">Copy</span>
+                  </div>
+                  <pre class="req-body">{
+  "users": [
+    { "id": 1, "name": "Ada" },
+    { "id": 2, "name": "Grace" }
+  ],
+  "total": 2
+}</pre>
+                </div>
+              </div>
+              <div class="req-item">
+                <div class="req-top">
+                  <div class="req-meta">
+                    <span class="method post" style="min-width: 3.4em; padding: 2px 6px">POST</span>
+                    <span class="badge ok">201</span>
+                  </div>
+                  <span class="mock-btn">Mock</span>
+                </div>
+                <div class="url">https://api.example.com/api/users</div>
+              </div>
+              <div class="req-item">
+                <div class="req-top">
+                  <div class="req-meta">
+                    <span class="method" style="min-width: 3.4em; padding: 2px 6px">GET</span>
+                    <span class="badge ok">200</span>
+                    <span class="badge mod">MODIFIED</span>
+                  </div>
+                  <span class="mock-btn">Mock</span>
+                </div>
+                <div class="url">https://api.example.com/api/users/42/profile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="anno right">
+          Expand a request to inspect the <b>response body</b>, then turn it into a mock.
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Request modification + headers -->
+    <section class="slide" id="slide-04-headers">
+      <div class="slide-body">
+        <div class="anno left">
+          Switch Modify to <b>Request</b> to merge headers into the outgoing call.
+        </div>
+        <div class="panel-wrap" style="width: 460px">
+          <div class="panel" style="width: 460px; height: 600px">
+            <div class="tabs">
+              <div class="tab active">Rules (1)</div>
+              <div class="tab">Requests</div>
+              <div class="tab">Settings</div>
+              <div class="tab">About</div>
+            </div>
+            <div class="stop-btn">■ Stop mocking</div>
+            <div class="scroll" style="margin-top: 0">
+              <div class="card">
+                <div class="card-head">
+                  <div class="chev">▾</div>
+                  <div class="method post">POST</div>
+                  <div class="input" style="padding: 6px 8px; font-size: 12px">/api/checkout</div>
+                  <div class="calls">3 calls</div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="card-body">
+                  <div class="config config-4">
+                    <div class="label"><span>Match</span><div class="box">Contains</div></div>
+                    <div class="label"><span>Method</span><div class="box">POST</div></div>
+                    <div class="label"><span>Modify</span><div class="box" style="border-color: var(--primary-300); background: var(--primary-50); color: var(--primary-700); font-weight: 600">Request</div></div>
+                    <div class="label"><span>Delay</span><div class="box">0 ms</div></div>
+                  </div>
+                  <div class="response-panel" style="height: 260px">
+                    <div class="resp-tabs">
+                      <div class="resp-tab active">Request headers <span class="badge" style="background: var(--primary-100); color: var(--primary-600)">2</span></div>
+                    </div>
+                    <div class="headers">
+                      <div class="hrow" style="font-weight: 600; color: var(--text-muted); font-size: 11px">
+                        <span></span><span>Key</span><span>Value</span><span></span>
+                      </div>
+                      <div class="hrow">
+                        <input type="checkbox" checked disabled />
+                        <div class="input" style="padding: 5px 8px">X-Feature-Flag</div>
+                        <div class="input" style="padding: 5px 8px">checkout-v2</div>
+                        <span style="color: var(--text-muted); text-align: center">×</span>
+                      </div>
+                      <div class="hrow">
+                        <input type="checkbox" checked disabled />
+                        <div class="input" style="padding: 5px 8px">Authorization</div>
+                        <div class="input" style="padding: 5px 8px">Bearer demo-token</div>
+                        <span style="color: var(--text-muted); text-align: center">×</span>
+                      </div>
+                      <div style="padding: 8px; color: var(--primary-600); font-size: 12px; font-weight: 600">+ Add header</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="anno right">
+          Keep the <b>real response</b> — only the request is adjusted before it is sent.
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Privacy — open source, local-only -->
+    <section class="slide" id="slide-05-privacy">
+      <div class="slide-body">
+        <div class="anno left">
+          Fully <b>open source</b>. Inspect every line — nothing hidden, nothing phone-home.
+        </div>
+        <div class="panel-wrap">
+          <div class="panel">
+            <div class="tabs">
+              <div class="tab active">Rules</div>
+              <div class="tab">Requests</div>
+              <div class="tab">Settings</div>
+              <div class="tab">About</div>
+            </div>
+            <div class="start-btn" style="box-shadow: 0 0 0 3px #fdba74, 0 0 0 6px rgb(234 88 12 / 0.25)">▶ Start mocking</div>
+            <div class="field-caption">Rule set</div>
+            <div class="row">
+              <div class="grow"><div class="select">Default</div></div>
+              <div class="icon-btn">+</div>
+              <div class="icon-btn">✎</div>
+              <div class="icon-btn">↓</div>
+            </div>
+            <div class="toolbar">
+              <div class="grow"><div class="search">Search URL…</div></div>
+              <div class="primary-btn">Add rule +</div>
+            </div>
+            <div class="scroll">
+              <div class="card" style="opacity: 0.85; text-align: center; padding: 28px 16px; border-style: dashed">
+                <div style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px">No mock rules yet.</div>
+                <div class="primary-btn" style="margin: 0 auto">Add rule +</div>
+              </div>
+            </div>
+          </div>
+          <div class="callout" style="left: 50%; top: -8px; transform: translateX(-50%)">
+            Nothing is captured until you deliberately Start mocking — per tab only
+          </div>
+        </div>
+        <div class="anno-stack">
+          <div class="anno right">
+            Rules, captures, and traffic stay <b>on your device</b>. No cloud. No uploads. No accounts.
+          </div>
+          <div class="anno right">
+            Other tabs stay untouched. Mocking stays <b>off</b> until you enable it.
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
