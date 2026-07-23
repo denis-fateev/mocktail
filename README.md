@@ -5,7 +5,7 @@
 <h1 align="center">Mocktail</h1>
 
 <p align="center">
-  <strong>Mock APIs in the browser — without coding or waiting of the backend.</strong>
+  <strong>Mock APIs in the browser — without coding or waiting on the backend.</strong>
 </p>
 
 <p align="center">
