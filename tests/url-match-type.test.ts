@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_URL_MATCH_TYPE, matchesRuleUrl, normalizeUrlMatchType } from '../src/shared/rules/url-match-type';
+import { matchesRuleUrl } from '../src/shared/rules/url-match-type';
 
 describe('matchesRuleUrl', () => {
   const url = 'https://api.example.com/users/42';

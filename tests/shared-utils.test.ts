@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { formatJsonBody, normalizeResponseBody } from '../src/shared/rules/response-body';
 import { matchesUrlSearch } from '../src/shared/utils/url-search';
-import { toBase64 } from '../src/shared/utils';
 
 describe('normalizeResponseBody', () => {
   it('keeps provided bodies and turns undefined into an empty string', () => {
