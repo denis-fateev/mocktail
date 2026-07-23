@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Mocktail",
-  "description": "Mocktail mocks API responses and modifies outgoing requests directly in the browser with per-tab activation.",
+  "name": "Mocktail: Mock API & Modify Requests",
+  "description": "Intercept and mock API responses, override JSON, status codes, and headers. Modify requests locally, open source.",
   "version": "1.0.0",
   "minimum_chrome_version": "114",
   "action": {
