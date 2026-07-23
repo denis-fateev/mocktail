@@ -3,6 +3,7 @@ import styles from './AboutPage.module.css';
 
 const CONTACT_EMAIL = 'denisprof2@gmail.com';
 
+const GITHUB_URL = 'https://github.com/denis-fateev/mocktail';
 const PRIVACY_URL = 'https://denis-fateev.github.io/mocktail/privacy.html';
 const LICENSES_URL = chrome.runtime.getURL('THIRD_PARTY_NOTICES.md');
 const ICON_URL = chrome.runtime.getURL('mocktail_icon.png');
@@ -54,6 +55,13 @@ const FAQ_ITEMS = [
     answer: (
       <>
         <p>
+          Mocktail is{' '}
+          <a className={styles.link} href={GITHUB_URL} target="_blank" rel="noreferrer">
+            open source
+          </a>{' '}
+          — the full code is public, nothing is hidden.
+        </p>
+        <p>
           The extension <strong>does not intercept requests until you deliberately enable mocking</strong>.
         </p>
         <p>
@@ -104,6 +112,9 @@ export const AboutPage = () => (
             Mocktail mocks API responses and modifies outgoing requests directly in the browser with per-tab activation.
           </p>
           <div className={styles.links}>
+            <a className={styles.licensesLink} href={GITHUB_URL} target="_blank" rel="noreferrer">
+              Source code
+            </a>
             <a className={styles.licensesLink} href={PRIVACY_URL} target="_blank" rel="noreferrer">
               Privacy Policy
             </a>
