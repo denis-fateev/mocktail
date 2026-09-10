@@ -1,6 +1,6 @@
 {
   "name": "mocktail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Chrome extension for mocking API responses and modifying requests per tab.",
   "type": "module",
