@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
 import { useAppSettings } from '@features/settings/model/useAppSettings';
 import type { CapturedRequest } from '@shared/network/types';
+import { DEFAULT_HTTP_STATUS_CODE } from '@shared/rules/defaults';
 import { DEFAULT_RESPONSE_BODY } from '@shared/rules/response-body';
 import { omitCopiedResponseHeaders } from '@shared/rules/response-headers';
 import { createMockRule, normalizeHttpMethod, type MockRule } from '@shared/rules/types';
@@ -90,7 +91,7 @@ export const RequestList = ({
 
     const rule = createMockRule(request.url, {
       method: normalizeHttpMethod(request.method),
-      statusCode: request.status,
+      statusCode: DEFAULT_HTTP_STATUS_CODE,
       responseBody: request.responseBody ?? DEFAULT_RESPONSE_BODY,
       ...(copiedHeaders.length > 0 ? { responseHeaders: copiedHeaders } : {}),
     });
