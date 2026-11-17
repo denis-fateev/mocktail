@@ -105,6 +105,13 @@ export const IconCopy = ({ size = 16, className }: IconProps) => (
   </svg>
 );
 
+export const IconTag = ({ size = 16, className }: IconProps) => (
+  <svg {...defaultProps(size, className)}>
+    <path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42L11 21l10-10Z" />
+    <circle cx="7" cy="7" r="1" />
+  </svg>
+);
+
 export const IconCopySuccess = ({ size = 16, className }: IconProps) => (
   <svg {...defaultProps(size, className)}>
     <path d="M20 6 9 17l-5-5" />

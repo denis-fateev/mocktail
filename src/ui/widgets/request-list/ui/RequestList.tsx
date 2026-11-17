@@ -4,7 +4,7 @@ import type { CapturedRequest } from '@shared/network/types';
 import { DEFAULT_RESPONSE_BODY } from '@shared/rules/response-body';
 import { omitCopiedResponseHeaders } from '@shared/rules/response-headers';
 import { createMockRule, normalizeHttpMethod, type MockRule } from '@shared/rules/types';
-import { matchesUrlSearch } from '@shared/utils/url-search';
+import { matchesTextSearch } from '@shared/utils/text-search';
 import { CopyButton } from '@ui/shared/ui/CopyButton';
 import { UrlSearchInput } from '@ui/shared/ui/UrlSearchInput';
 import { IconTrash } from '@ui/shared/ui/icons';
@@ -69,7 +69,7 @@ export const RequestList = ({
 
   const visibleRequests = useMemo(() => {
     if (!searchQuery.trim()) return requests;
-    return requests.filter((request) => matchesUrlSearch(searchQuery, request.url));
+    return requests.filter((request) => matchesTextSearch(searchQuery, request.url));
   }, [requests, searchQuery]);
 
   const hasSearchQuery = searchQuery.trim().length > 0;

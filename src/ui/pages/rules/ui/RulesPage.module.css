@@ -28,7 +28,7 @@
 }
 
 .searchInput {
-  display: block;
+  display: grid;
   flex: 1;
   min-width: 0;
   margin: 0;

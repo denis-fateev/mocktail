@@ -51,6 +51,10 @@ export function collectMockRuleValidationErrors(rule: unknown, index: number): s
     errors.push(`${label}: "url" must be a non-empty string.`);
   }
 
+  if (rule.label !== undefined && typeof rule.label !== 'string') {
+    errors.push(`${label}: "label" must be a string.`);
+  }
+
   if (rule.method !== undefined) {
     if (typeof rule.method !== 'string' || !isHttpMethod(rule.method)) {
       errors.push(

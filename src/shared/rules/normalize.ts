@@ -21,6 +21,7 @@ export function normalizeRule(rule: Partial<MockRule> & Pick<MockRule, 'url'>): 
   return {
     ...withDefaults,
     id: typeof rule.id === 'string' && rule.id ? rule.id : createMockRuleId(),
+    label: typeof withDefaults.label === 'string' ? withDefaults.label : '',
     url: rule.url.trim(),
     urlMatchType: normalizeUrlMatchType(rule.urlMatchType),
     method,
