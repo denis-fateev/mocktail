@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { useMockRules } from '@features/mock-rule/model/useMockRules';
 import { RuleCard } from '@features/mock-rule/ui/RuleCard';
 import { RuleSetBar } from '@features/rule-set/ui/RuleSetBar';
+import { serializeRuleSetExport } from '@shared/rules/import-export';
 import { matchesTextSearch } from '@shared/utils/text-search';
 import { UrlSearchInput } from '@ui/shared/ui/UrlSearchInput';
 import { MockingControls } from '@widgets/mocking-controls/ui/MockingControls';
@@ -52,7 +53,6 @@ export const RulesPage = ({
     deleteSet,
     renameSet,
     switchSet,
-    exportActiveSet,
     importSet,
   } = mockRules;
 
@@ -67,6 +67,10 @@ export const RulesPage = ({
   }, [highlightedRuleId]);
 
   const hasAnyExpanded = useMemo(() => rules.some((rule) => !rule.collapsed), [rules]);
+  const exportText = useMemo(() => {
+    const activeSet = sets.find((set) => set.id === activeSetId);
+    return activeSet ? serializeRuleSetExport(activeSet.name, rules) : '';
+  }, [activeSetId, rules, sets]);
 
   const toggleAllExpanded = () => {
     setAllRulesCollapsed(hasAnyExpanded);
@@ -102,7 +106,7 @@ export const RulesPage = ({
             onCreate={createSet}
             onRename={(setId, name) => void renameSet(setId, name)}
             onDelete={deleteSet}
-            onExport={exportActiveSet}
+            exportText={exportText}
             onImport={importSet}
           />
 
