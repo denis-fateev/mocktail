@@ -128,9 +128,7 @@ export const RequestList = ({
         {visibleRequests.length === 0 && !hasError && hasSearchQuery && (
           <li className={styles.empty}>No requests match this URL search.</li>
         )}
-        {visibleRequests.length === 0 && !hasError && !hasSearchQuery && (
-          <li className={styles.empty}>Waiting for requests…</li>
-        )}
+        {visibleRequests.length === 0 && !hasError && !hasSearchQuery && <li className={styles.empty}>Waiting for requests…</li>}
         {visibleRequests.map((req, index) => {
           const expanded = expandedIds.has(req.id);
           const responseBody = req.responseBody;
