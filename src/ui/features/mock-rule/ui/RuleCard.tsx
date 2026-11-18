@@ -3,19 +3,12 @@ import type { CSSProperties } from 'react';
 import { HTTP_METHOD_OPTIONS, MODIFY_TYPE_OPTIONS, URL_MATCH_TYPE_OPTIONS } from '@features/mock-rule/model/rule-config-types';
 import { formatJsonBody } from '@shared/rules/response-body';
 import { createEmptyResponseHeader, isJsonContentType } from '@shared/rules/response-headers';
-import type { HttpMethod, MockRule, MockRuleUpdate } from '@shared/rules/types';
+import type { HttpMethod, MockRule, MockRuleUpdate, ResponseHeader } from '@shared/rules/types';
 import { RuleDelayField } from '@features/mock-rule/ui/RuleDelayField';
 import { RuleResponsePanel } from '@features/mock-rule/ui/RuleResponsePanel';
 import { RuleSelectField } from '@features/mock-rule/ui/RuleSelectField';
 import { RuleStatusCodeField } from '@features/mock-rule/ui/RuleStatusCodeField';
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconChevronDown,
-  IconCopy,
-  IconMoreVertical,
-  IconTrash,
-} from '@ui/shared/ui/icons';
+import { IconArrowDown, IconArrowUp, IconChevronDown, IconCopy, IconMoreVertical, IconTag, IconTrash } from '@ui/shared/ui/icons';
 import styles from './RuleCard.module.css';
 
 type RuleCardProps = {
@@ -50,6 +43,7 @@ export const RuleCard = ({
   onDelete,
 }: RuleCardProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [labelActive, setLabelActive] = useState(rule.label.length > 0);
   const [responseTab, setResponseTab] = useState<'response' | 'headers'>('response');
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -63,7 +57,7 @@ export const RuleCard = ({
 
   useLayoutEffect(() => {
     scrollUrlInputToEnd();
-  }, [expanded]);
+  }, [expanded, labelActive]);
 
   const isRequestMode = rule.modifyType === 'request';
   const isJsonResponse = !isRequestMode && isJsonContentType(rule.responseHeaders);
@@ -111,7 +105,7 @@ export const RuleCard = ({
 
   const closeMenu = () => setMenuOpen(false);
 
-  const updateResponseHeaderAt = (index: number, patch: { key?: string; value?: string }) => {
+  const updateResponseHeaderAt = (index: number, patch: Partial<ResponseHeader>) => {
     const nextHeaders = rule.responseHeaders.map((header, currentIndex) =>
       currentIndex === index ? { ...header, ...patch } : header,
     );
@@ -130,7 +124,7 @@ export const RuleCard = ({
     });
   };
 
-  const updateRequestHeaderAt = (index: number, patch: { key?: string; value?: string }) => {
+  const updateRequestHeaderAt = (index: number, patch: Partial<ResponseHeader>) => {
     const nextHeaders = rule.requestHeaders.map((header, currentIndex) =>
       currentIndex === index ? { ...header, ...patch } : header,
     );
@@ -169,10 +163,7 @@ export const RuleCard = ({
             aria-expanded={expanded}
             aria-label={expanded ? 'Collapse rule' : 'Expand rule'}
           >
-            <IconChevronDown
-              size={14}
-              className={expanded ? styles.chevronExpanded : styles.chevronCollapsed}
-            />
+            <IconChevronDown size={14} className={expanded ? styles.chevronExpanded : styles.chevronCollapsed} />
           </button>
         </div>
 
@@ -188,15 +179,15 @@ export const RuleCard = ({
 
         <div className={`${styles.urlCell} ${expanded ? styles.urlCellExpanded : ''}`}>
           <input
-            ref={urlInputRef}
+            ref={labelActive ? undefined : urlInputRef}
             className={styles.urlInput}
             type="text"
-            value={rule.url}
-            onChange={(event) => onRuleChange({ url: event.target.value })}
-            placeholder="https://api.example.com/user"
+            value={labelActive ? rule.label : rule.url}
+            onChange={(event) => onRuleChange(labelActive ? { label: event.target.value } : { url: event.target.value })}
+            placeholder={labelActive ? 'Rule label' : 'https://api.example.com/user'}
             disabled={loading}
             spellCheck={false}
-            onBlur={scrollUrlInputToEnd}
+            onBlur={labelActive ? undefined : scrollUrlInputToEnd}
           />
         </div>
 
@@ -222,77 +213,111 @@ export const RuleCard = ({
           </div>
 
           <div className={styles.menuCell} ref={menuRef}>
-          <button
-            type="button"
-            className={styles.menuButton}
-            onClick={() => setMenuOpen((current) => !current)}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            aria-controls={menuId}
-            aria-label="Rule actions"
-          >
-            <IconMoreVertical size={16} />
-          </button>
+            <button
+              type="button"
+              className={styles.menuButton}
+              onClick={() => setMenuOpen((current) => !current)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              aria-controls={menuId}
+              aria-label="Rule actions"
+            >
+              <IconMoreVertical size={16} />
+            </button>
 
-          {menuOpen && (
-            <div id={menuId} className={styles.menu} role="menu">
-              <button
-                type="button"
-                className={styles.menuItem}
-                role="menuitem"
-                onClick={() => {
-                  closeMenu();
-                  onDuplicate();
-                }}
-              >
-                <IconCopy size={14} className={styles.menuItemIcon} />
-                Duplicate
-              </button>
-              <button
-                type="button"
-                className={styles.menuItem}
-                role="menuitem"
-                onClick={() => {
-                  closeMenu();
-                  onMoveUp();
-                }}
-              >
-                <IconArrowUp size={14} className={styles.menuItemIcon} />
-                Move up
-              </button>
-              <button
-                type="button"
-                className={styles.menuItem}
-                role="menuitem"
-                onClick={() => {
-                  closeMenu();
-                  onMoveDown();
-                }}
-              >
-                <IconArrowDown size={14} className={styles.menuItemIcon} />
-                Move down
-              </button>
-              <div className={styles.menuDivider} role="separator" />
-              <button
-                type="button"
-                className={styles.menuItemDanger}
-                role="menuitem"
-                onClick={() => {
-                  closeMenu();
-                  onDelete();
-                }}
-              >
-                <IconTrash size={14} className={styles.menuItemIcon} />
-                Delete
-              </button>
-            </div>
-          )}
+            {menuOpen && (
+              <div id={menuId} className={styles.menu} role="menu">
+                <button
+                  type="button"
+                  className={styles.menuItem}
+                  role="menuitem"
+                  onClick={() => {
+                    closeMenu();
+                    if (labelActive) {
+                      setLabelActive(false);
+                      onRuleChange({ label: '' });
+                    } else {
+                      setLabelActive(true);
+                    }
+                  }}
+                >
+                  <IconTag size={14} className={styles.menuItemIcon} />
+                  {labelActive ? 'Remove label' : 'Add label'}
+                </button>
+                <button
+                  type="button"
+                  className={styles.menuItem}
+                  role="menuitem"
+                  onClick={() => {
+                    closeMenu();
+                    onDuplicate();
+                  }}
+                >
+                  <IconCopy size={14} className={styles.menuItemIcon} />
+                  Duplicate
+                </button>
+                <button
+                  type="button"
+                  className={styles.menuItem}
+                  role="menuitem"
+                  onClick={() => {
+                    closeMenu();
+                    onMoveUp();
+                  }}
+                >
+                  <IconArrowUp size={14} className={styles.menuItemIcon} />
+                  Move up
+                </button>
+                <button
+                  type="button"
+                  className={styles.menuItem}
+                  role="menuitem"
+                  onClick={() => {
+                    closeMenu();
+                    onMoveDown();
+                  }}
+                >
+                  <IconArrowDown size={14} className={styles.menuItemIcon} />
+                  Move down
+                </button>
+                <div className={styles.menuDivider} role="separator" />
+                <button
+                  type="button"
+                  className={styles.menuItemDanger}
+                  role="menuitem"
+                  onClick={() => {
+                    closeMenu();
+                    onDelete();
+                  }}
+                >
+                  <IconTrash size={14} className={styles.menuItemIcon} />
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {expanded && (
         <div className={styles.body}>
+          {labelActive && (
+            <label className={styles.detailsUrlField}>
+              <span className={styles.fieldLabel}>URL</span>
+              <input
+                ref={urlInputRef}
+                className={styles.urlInput}
+                type="text"
+                value={rule.url}
+                onChange={(event) => onRuleChange({ url: event.target.value })}
+                placeholder="https://api.example.com/user"
+                disabled={loading}
+                spellCheck={false}
+                onBlur={scrollUrlInputToEnd}
+              />
+            </label>
+          )}
+
           <div className={`${styles.configRow} ${isRequestMode ? styles.configRowRequest : ''}`}>
             <RuleSelectField
               label="URL match"
@@ -348,6 +373,12 @@ export const RuleCard = ({
             }
             onHeaderValueChange={(index, value) =>
               isRequestMode ? updateRequestHeaderAt(index, { value }) : updateResponseHeaderAt(index, { value })
+            }
+            onHeaderEnabledChange={(index, enabled) =>
+              isRequestMode ? updateRequestHeaderAt(index, { enabled }) : updateResponseHeaderAt(index, { enabled })
+            }
+            onHeadersChange={(headers) =>
+              onRuleChange(isRequestMode ? { requestHeaders: headers } : { responseHeaders: headers })
             }
             onAddHeader={isRequestMode ? addRequestHeader : addResponseHeader}
             onRemoveHeader={isRequestMode ? removeRequestHeaderAt : removeResponseHeaderAt}

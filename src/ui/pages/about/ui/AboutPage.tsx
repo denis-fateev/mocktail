@@ -1,4 +1,4 @@
-import { IconChevronDown } from '@ui/shared/ui/icons';
+import { IconChevronDown, IconStar } from '@ui/shared/ui/icons';
 import styles from './AboutPage.module.css';
 
 const CONTACT_EMAIL = 'denisprof2@gmail.com';
@@ -111,16 +111,25 @@ export const AboutPage = () => (
           <p className={styles.text}>
             Mocktail mocks API responses and modifies outgoing requests directly in the browser with per-tab activation.
           </p>
-          <div className={styles.links}>
-            <a className={styles.licensesLink} href={GITHUB_URL} target="_blank" rel="noreferrer">
-              Source code
+          <div className={styles.actions}>
+            <a
+              className={styles.githubButton}
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Star Mocktail on GitHub"
+            >
+              <IconStar size={15} />
+              Star on GitHub
             </a>
-            <a className={styles.licensesLink} href={PRIVACY_URL} target="_blank" rel="noreferrer">
-              Privacy Policy
-            </a>
-            <a className={styles.licensesLink} href={LICENSES_URL} target="_blank" rel="noreferrer">
-              Open source licenses
-            </a>
+            <div className={styles.links}>
+              <a className={styles.licensesLink} href={PRIVACY_URL} target="_blank" rel="noreferrer">
+                Privacy Policy
+              </a>
+              <a className={styles.licensesLink} href={LICENSES_URL} target="_blank" rel="noreferrer">
+                Open source licenses
+              </a>
+            </div>
           </div>
         </div>
       </div>

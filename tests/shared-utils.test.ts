@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { formatJsonBody, normalizeResponseBody } from '../src/shared/rules/response-body';
-import { matchesUrlSearch } from '../src/shared/utils/url-search';
+import { matchesTextSearch } from '../src/shared/utils/text-search';
 
 describe('normalizeResponseBody', () => {
   it('keeps provided bodies and turns undefined into an empty string', () => {
@@ -17,11 +17,12 @@ describe('formatJsonBody', () => {
   });
 });
 
-describe('matchesUrlSearch', () => {
+describe('matchesTextSearch', () => {
   it('matches case-insensitively and treats blank queries as match-all', () => {
-    expect(matchesUrlSearch('', 'https://API.example.com/users')).toBe(true);
-    expect(matchesUrlSearch('  ', 'https://API.example.com/users')).toBe(true);
-    expect(matchesUrlSearch('api.example', 'https://API.example.com/users')).toBe(true);
-    expect(matchesUrlSearch('orders', 'https://API.example.com/users')).toBe(false);
+    expect(matchesTextSearch('', 'https://API.example.com/users')).toBe(true);
+    expect(matchesTextSearch('  ', 'https://API.example.com/users')).toBe(true);
+    expect(matchesTextSearch('api.example', 'https://API.example.com/users')).toBe(true);
+    expect(matchesTextSearch('users api', 'https://api.example.com/users', 'Users API')).toBe(true);
+    expect(matchesTextSearch('orders', 'https://API.example.com/users', 'Users API')).toBe(false);
   });
 });

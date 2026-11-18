@@ -1,10 +1,11 @@
 import { useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
 import { useAppSettings } from '@features/settings/model/useAppSettings';
 import type { CapturedRequest } from '@shared/network/types';
+import { DEFAULT_HTTP_STATUS_CODE } from '@shared/rules/defaults';
 import { DEFAULT_RESPONSE_BODY } from '@shared/rules/response-body';
 import { omitCopiedResponseHeaders } from '@shared/rules/response-headers';
 import { createMockRule, normalizeHttpMethod, type MockRule } from '@shared/rules/types';
-import { matchesUrlSearch } from '@shared/utils/url-search';
+import { matchesTextSearch } from '@shared/utils/text-search';
 import { CopyButton } from '@ui/shared/ui/CopyButton';
 import { UrlSearchInput } from '@ui/shared/ui/UrlSearchInput';
 import { IconTrash } from '@ui/shared/ui/icons';
@@ -69,7 +70,7 @@ export const RequestList = ({
 
   const visibleRequests = useMemo(() => {
     if (!searchQuery.trim()) return requests;
-    return requests.filter((request) => matchesUrlSearch(searchQuery, request.url));
+    return requests.filter((request) => matchesTextSearch(searchQuery, request.url));
   }, [requests, searchQuery]);
 
   const hasSearchQuery = searchQuery.trim().length > 0;
@@ -90,7 +91,7 @@ export const RequestList = ({
 
     const rule = createMockRule(request.url, {
       method: normalizeHttpMethod(request.method),
-      statusCode: request.status,
+      statusCode: DEFAULT_HTTP_STATUS_CODE,
       responseBody: request.responseBody ?? DEFAULT_RESPONSE_BODY,
       ...(copiedHeaders.length > 0 ? { responseHeaders: copiedHeaders } : {}),
     });
@@ -127,9 +128,7 @@ export const RequestList = ({
         {visibleRequests.length === 0 && !hasError && hasSearchQuery && (
           <li className={styles.empty}>No requests match this URL search.</li>
         )}
-        {visibleRequests.length === 0 && !hasError && !hasSearchQuery && (
-          <li className={styles.empty}>Waiting for requests…</li>
-        )}
+        {visibleRequests.length === 0 && !hasError && !hasSearchQuery && <li className={styles.empty}>Waiting for requests…</li>}
         {visibleRequests.map((req, index) => {
           const expanded = expandedIds.has(req.id);
           const responseBody = req.responseBody;

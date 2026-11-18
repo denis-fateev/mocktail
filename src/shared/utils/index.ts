@@ -1,4 +1,4 @@
-export { matchesUrlSearch } from './url-search';
+export { matchesTextSearch } from './text-search';
 
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));

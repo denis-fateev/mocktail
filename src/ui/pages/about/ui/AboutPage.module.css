@@ -76,11 +76,44 @@
   text-decoration-color: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 10px 0 0;
+}
+
+.githubButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #1f2328;
+  border-radius: var(--radius-md);
+  background: #24292f;
+  box-shadow: var(--shadow-sm);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.githubButton:hover {
+  background: #1f2328;
+}
+
+.githubButton:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin: 8px 0 0;
+  margin: 0;
 }
 
 .licensesLink:hover {

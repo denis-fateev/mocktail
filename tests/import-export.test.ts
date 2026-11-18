@@ -11,7 +11,7 @@ import { createMockRule } from '../src/shared/rules/types';
 
 describe('rule set import/export', () => {
   it('serializes and parses a v1 export document', () => {
-    const rules = [createMockRule('https://api.example.com/users', { collapsed: true })];
+    const rules = [createMockRule('https://api.example.com/users', { collapsed: true, label: 'Users API' })];
     const text = serializeRuleSetExport('My API', rules);
     const exported = JSON.parse(text) as { rules: Array<Record<string, unknown>> };
     const parsed = parseRuleSetExport(text);
@@ -19,8 +19,28 @@ describe('rule set import/export', () => {
     expect(parsed.name).toBe('My API');
     expect(parsed.rules).toHaveLength(1);
     expect(parsed.rules[0]?.url).toBe('https://api.example.com/users');
+    expect(parsed.rules[0]?.label).toBe('Users API');
     expect(exported.rules[0]).not.toHaveProperty('collapsed');
     expect(parsed.rules[0]?.collapsed).toBe(false);
+  });
+
+  it('imports old rules without a label', () => {
+    const parsed = parseRuleSetExport(
+      JSON.stringify({
+        format: RULE_SET_EXPORT_FORMAT,
+        version: RULE_SET_EXPORT_VERSION,
+        name: 'Old API',
+        rules: [
+          {
+            url: 'https://api.example.com/users',
+            responseHeaders: [{ key: 'X-Legacy', value: 'yes' }],
+          },
+        ],
+      }),
+    );
+
+    expect(parsed.rules[0]?.label).toBe('');
+    expect(parsed.rules[0]?.responseHeaders).toEqual([{ key: 'X-Legacy', value: 'yes', enabled: true }]);
   });
 
   it('rejects unsupported formats and versions', () => {

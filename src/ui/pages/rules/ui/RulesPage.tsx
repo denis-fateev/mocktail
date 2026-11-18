@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { useMockRules } from '@features/mock-rule/model/useMockRules';
 import { RuleCard } from '@features/mock-rule/ui/RuleCard';
 import { RuleSetBar } from '@features/rule-set/ui/RuleSetBar';
-import { matchesUrlSearch } from '@shared/utils/url-search';
+import { serializeRuleSetExport } from '@shared/rules/import-export';
+import { matchesTextSearch } from '@shared/utils/text-search';
 import { UrlSearchInput } from '@ui/shared/ui/UrlSearchInput';
 import { MockingControls } from '@widgets/mocking-controls/ui/MockingControls';
 import { IconChevronsDownUp, IconPlus } from '@ui/shared/ui/icons';
@@ -52,7 +53,6 @@ export const RulesPage = ({
     deleteSet,
     renameSet,
     switchSet,
-    exportActiveSet,
     importSet,
   } = mockRules;
 
@@ -67,6 +67,10 @@ export const RulesPage = ({
   }, [highlightedRuleId]);
 
   const hasAnyExpanded = useMemo(() => rules.some((rule) => !rule.collapsed), [rules]);
+  const exportText = useMemo(() => {
+    const activeSet = sets.find((set) => set.id === activeSetId);
+    return activeSet ? serializeRuleSetExport(activeSet.name, rules) : '';
+  }, [activeSetId, rules, sets]);
 
   const toggleAllExpanded = () => {
     setAllRulesCollapsed(hasAnyExpanded);
@@ -76,7 +80,7 @@ export const RulesPage = ({
     const indexedRules = rules.map((rule, index) => ({ rule, index }));
     if (highlightedRuleId || !searchQuery.trim()) return indexedRules;
 
-    return indexedRules.filter(({ rule }) => matchesUrlSearch(searchQuery, rule.url));
+    return indexedRules.filter(({ rule }) => matchesTextSearch(searchQuery, rule.url, rule.label));
   }, [rules, searchQuery, highlightedRuleId]);
 
   const hasSearchQuery = searchQuery.trim().length > 0;
@@ -102,12 +106,18 @@ export const RulesPage = ({
             onCreate={createSet}
             onRename={(setId, name) => void renameSet(setId, name)}
             onDelete={deleteSet}
-            onExport={exportActiveSet}
+            exportText={exportText}
             onImport={importSet}
           />
 
           <div className={styles.toolbar}>
-            <UrlSearchInput className={styles.searchInput} value={searchQuery} onChange={setSearchQuery} disabled={loading} />
+            <UrlSearchInput
+              className={styles.searchInput}
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search by URL or label…"
+              disabled={loading}
+            />
             <div className={styles.toolbarActions}>
               {rules.length > 0 && (
                 <button
@@ -154,7 +164,7 @@ export const RulesPage = ({
         )}
 
         {rules.length > 0 && visibleRules.length === 0 && !loading && hasSearchQuery && (
-          <p className={styles.emptyText}>No rules match this URL search.</p>
+          <p className={styles.emptyText}>No rules match this search.</p>
         )}
 
         <ul className={styles.list}>

@@ -84,6 +84,12 @@ export const IconChevronDown = ({ size = 16, className }: IconProps) => (
   </svg>
 );
 
+export const IconStar = ({ size = 16, className }: IconProps) => (
+  <svg {...defaultProps(size, className)}>
+    <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01Z" />
+  </svg>
+);
+
 export const IconChevronsDownUp = ({ size = 16, className }: IconProps) => (
   <svg {...defaultProps(size, className)}>
     <path d="m7 15 5 5 5-5" />
@@ -102,6 +108,13 @@ export const IconCopy = ({ size = 16, className }: IconProps) => (
   <svg {...defaultProps(size, className)}>
     <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+  </svg>
+);
+
+export const IconTag = ({ size = 16, className }: IconProps) => (
+  <svg {...defaultProps(size, className)}>
+    <path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42L11 21l10-10Z" />
+    <circle cx="7" cy="7" r="1" />
   </svg>
 );
 

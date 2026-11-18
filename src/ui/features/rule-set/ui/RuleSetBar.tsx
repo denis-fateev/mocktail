@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { RULE_SET_AI_IMPORT_PROMPT } from '@shared/rules/ai-import-prompt';
 import type { RuleSetSummary } from '@shared/rules/rule-set';
 import {
@@ -81,7 +81,7 @@ type RuleSetBarProps = {
   onCreate: () => Promise<string | null>;
   onRename: (setId: string, name: string) => void;
   onDelete: (setId: string) => Promise<string | null>;
-  onExport: () => Promise<string | null>;
+  exportText: string;
   onImport: (text: string) => Promise<string | null>;
 };
 
@@ -95,7 +95,7 @@ export const RuleSetBar = ({
   onCreate,
   onRename,
   onDelete,
-  onExport,
+  exportText,
   onImport,
 }: RuleSetBarProps) => {
   const [isRenaming, setIsRenaming] = useState(false);
@@ -103,46 +103,15 @@ export const RuleSetBar = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
   const [transferMode, setTransferMode] = useState<TransferMode>('export');
-  const [exportText, setExportText] = useState('');
   const [importText, setImportText] = useState('');
   const [transferMessage, setTransferMessage] = useState<string | null>(null);
   const [transferMessageIsError, setTransferMessageIsError] = useState(false);
   const [transferLoading, setTransferLoading] = useState(false);
-  const [exportForSetId, setExportForSetId] = useState<string | null>(null);
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
 
   const activeSet = useMemo(() => sets.find((set) => set.id === activeSetId), [sets, activeSetId]);
   const canDelete = sets.length > 1;
-
-  const loadExportText = useCallback(
-    async (setId: string) => {
-      if (!setId) {
-        setExportText('');
-        setExportForSetId(null);
-        return;
-      }
-
-      setTransferLoading(true);
-      const text = await onExport();
-      setTransferLoading(false);
-
-      if (text !== null) {
-        setExportText(text);
-        setExportForSetId(setId);
-        return;
-      }
-
-      setTransferMessage('Failed to export rule set.');
-      setTransferMessageIsError(true);
-    },
-    [onExport],
-  );
-
-  const reloadExportIfOpen = (setId: string | null | undefined) => {
-    if (!setId || !transferOpen || transferMode !== 'export') return;
-    void loadExportText(setId);
-  };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -160,14 +129,12 @@ export const RuleSetBar = ({
   const closeMenu = () => setMenuOpen(false);
 
   const handleSwitch = async (setId: string) => {
-    const nextSetId = await onSwitch(setId);
-    reloadExportIfOpen(nextSetId);
+    await onSwitch(setId);
   };
 
   const handleCreate = async () => {
     closeMenu();
-    const nextSetId = await onCreate();
-    reloadExportIfOpen(nextSetId);
+    await onCreate();
   };
 
   const startRenaming = () => {
@@ -190,30 +157,21 @@ export const RuleSetBar = ({
       `Delete rule set "${activeSet.name}" and all ${activeSet.ruleCount} rule(s)? This cannot be undone.`,
     );
     if (!confirmed) return;
-    const nextSetId = await onDelete(activeSet.id);
-    reloadExportIfOpen(nextSetId);
+    await onDelete(activeSet.id);
   };
 
-  const openTransfer = async (mode: TransferMode) => {
+  const openTransfer = (mode: TransferMode) => {
     closeMenu();
     setTransferOpen(true);
     setTransferMode(mode);
     setTransferMessage(null);
     setTransferMessageIsError(false);
-
-    if (mode === 'export' && (exportForSetId !== activeSetId || !exportText)) {
-      await loadExportText(activeSetId);
-    }
   };
 
   const switchToExportTab = () => {
     setTransferMode('export');
     setTransferMessage(null);
     setTransferMessageIsError(false);
-
-    if (exportForSetId !== activeSetId || !exportText) {
-      void loadExportText(activeSetId);
-    }
   };
 
   const showCopyError = (message: string) => {
@@ -328,7 +286,7 @@ export const RuleSetBar = ({
                       type="button"
                       className={styles.menuItem}
                       role="menuitem"
-                      onClick={() => void openTransfer('export')}
+                      onClick={() => openTransfer('export')}
                       disabled={!activeSet}
                     >
                       <IconUpload size={14} className={styles.menuItemIcon} />
@@ -338,7 +296,7 @@ export const RuleSetBar = ({
                       type="button"
                       className={styles.menuItem}
                       role="menuitem"
-                      onClick={() => void openTransfer('import')}
+                      onClick={() => openTransfer('import')}
                       disabled={!activeSet}
                     >
                       <IconDownload size={14} className={styles.menuItemIcon} />
@@ -402,7 +360,7 @@ export const RuleSetBar = ({
                 value={exportText}
                 rows={8}
                 ariaLabel="Exported rule set JSON"
-                copyDisabled={transferLoading || !exportText}
+                copyDisabled={!exportText}
                 onCopyError={showCopyError}
               />
             </div>

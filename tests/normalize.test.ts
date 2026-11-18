@@ -19,9 +19,7 @@ describe('rule normalization', () => {
     });
 
     expect(rule).not.toBeNull();
-    expect(rule?.responseHeaders).toEqual([
-      { key: 'Content-Type', value: 'application/json; charset=utf-8' },
-    ]);
+    expect(rule?.responseHeaders).toEqual([{ key: 'Content-Type', value: 'application/json; charset=utf-8', enabled: true }]);
   });
 
   it('keeps valid empty response headers', () => {
@@ -43,7 +41,7 @@ describe('rule normalization', () => {
     expect(rule).not.toBeNull();
     expect(rule?.url).toBe('');
     expect(rule?.method).toBe(DEFAULT_HTTP_METHOD);
-    expect(rule?.responseHeaders).toEqual([{ key: 'X-Test', value: '1' }]);
+    expect(rule?.responseHeaders).toEqual([{ key: 'X-Test', value: '1', enabled: true }]);
   });
 
   it('defaults collapsed to false and preserves stored collapse state', () => {

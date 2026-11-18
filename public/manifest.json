@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Mocktail: Mock API & Modify Requests",
   "description": "Intercept and mock API responses, override JSON, status codes, and headers. Modify requests locally, open source.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "minimum_chrome_version": "114",
   "action": {
     "default_title": "Mocktail",

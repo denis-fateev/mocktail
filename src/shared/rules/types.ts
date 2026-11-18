@@ -30,6 +30,7 @@ export const DEFAULT_MODIFY_TYPE: ModifyType = 'response';
 
 export type MockRule = {
   id: string;
+  label: string;
   url: string;
   urlMatchType: UrlMatchType;
   method: HttpMethod;
@@ -67,6 +68,7 @@ export function normalizeModifyType(value: unknown): ModifyType {
 export function createMockRule(url = '', overrides: Partial<MockRule> = {}): MockRule {
   return {
     id: createMockRuleId(),
+    label: '',
     url,
     urlMatchType: DEFAULT_URL_MATCH_TYPE,
     method: DEFAULT_HTTP_METHOD,
