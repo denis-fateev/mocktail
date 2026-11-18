@@ -52,7 +52,7 @@ describe('rule set state', () => {
     expect(state.sets[0]?.rules).toHaveLength(1);
     expect(state.sets[0]?.rules[0]?.method).toBe(DEFAULT_HTTP_METHOD);
     expect(state.sets[0]?.rules[0]?.responseHeaders).toEqual([
-      { key: 'Content-Type', value: 'application/json; charset=utf-8' },
+      { key: 'Content-Type', value: 'application/json; charset=utf-8', enabled: true },
     ]);
   });
 });

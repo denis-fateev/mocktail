@@ -30,11 +30,17 @@ describe('rule set import/export', () => {
         format: RULE_SET_EXPORT_FORMAT,
         version: RULE_SET_EXPORT_VERSION,
         name: 'Old API',
-        rules: [{ url: 'https://api.example.com/users' }],
+        rules: [
+          {
+            url: 'https://api.example.com/users',
+            responseHeaders: [{ key: 'X-Legacy', value: 'yes' }],
+          },
+        ],
       }),
     );
 
     expect(parsed.rules[0]?.label).toBe('');
+    expect(parsed.rules[0]?.responseHeaders).toEqual([{ key: 'X-Legacy', value: 'yes', enabled: true }]);
   });
 
   it('rejects unsupported formats and versions', () => {

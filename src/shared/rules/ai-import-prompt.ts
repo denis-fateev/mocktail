@@ -18,7 +18,7 @@ export const RULE_SET_AI_IMPORT_EXAMPLE = {
       statusCode: DEFAULT_HTTP_STATUS_CODE,
       delayMs: DEFAULT_DELAY_MS,
       responseBody: JSON.stringify({ users: [{ id: 1, name: 'Alice' }] }, null, 2),
-      responseHeaders: [{ key: 'Content-Type', value: DEFAULT_CONTENT_TYPE }],
+      responseHeaders: [{ key: 'Content-Type', value: DEFAULT_CONTENT_TYPE, enabled: true }],
     },
     {
       url: 'https://api.example.com/users',
@@ -32,7 +32,7 @@ export const RULE_SET_AI_IMPORT_EXAMPLE = {
       method: 'POST',
       modifyType: 'request',
       delayMs: 100,
-      requestHeaders: [{ key: 'X-Debug-Mode', value: 'true' }],
+      requestHeaders: [{ key: 'X-Debug-Mode', value: 'true', enabled: true }],
     },
   ],
 } as const;
@@ -76,12 +76,12 @@ Replaces the network response with a mock. Use these fields:
 - statusCode: integer 100-599 — default ${DEFAULT_HTTP_STATUS_CODE}
 - delayMs: integer 0-999999 — simulated response delay in ms, default ${DEFAULT_DELAY_MS}
 - responseBody: string — response payload; use a JSON string for APIs
-- responseHeaders: array of { "key": string, "value": string } — default Content-Type: ${DEFAULT_CONTENT_TYPE}
+- responseHeaders: array of { "key": string, "value": string, "enabled"?: boolean } — default Content-Type: ${DEFAULT_CONTENT_TYPE}; enabled defaults to true
 
 ### modifyType: "request"
 
 Leaves the real response intact and modifies the outgoing request instead. Use these fields:
-- requestHeaders: array of { "key": string, "value": string } — headers merged into the original request (default [])
+- requestHeaders: array of { "key": string, "value": string, "enabled"?: boolean } — enabled headers are merged into the original request (default [])
 - delayMs: integer 0-999999 — delay before the request is sent, default ${DEFAULT_DELAY_MS}
 
 Do not set statusCode, responseBody, or responseHeaders for request-modify rules unless you also need them as documentation; they are ignored at runtime.

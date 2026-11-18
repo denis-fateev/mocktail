@@ -1,14 +1,15 @@
 export type ResponseHeader = {
   key: string;
   value: string;
+  enabled: boolean;
 };
 
 export const DEFAULT_CONTENT_TYPE = 'application/json; charset=utf-8';
 
-export const DEFAULT_RESPONSE_HEADERS: ResponseHeader[] = [{ key: 'Content-Type', value: DEFAULT_CONTENT_TYPE }];
+export const DEFAULT_RESPONSE_HEADERS: ResponseHeader[] = [{ key: 'Content-Type', value: DEFAULT_CONTENT_TYPE, enabled: true }];
 
 export function createEmptyResponseHeader(): ResponseHeader {
-  return { key: '', value: '' };
+  return { key: '', value: '', enabled: true };
 }
 
 export function normalizeResponseHeaders(headers: unknown): ResponseHeader[] {
@@ -29,6 +30,7 @@ export function normalizeResponseHeaders(headers: unknown): ResponseHeader[] {
     normalized.push({
       key: key.trim(),
       value: value.trim(),
+      enabled: 'enabled' in header && typeof header.enabled === 'boolean' ? header.enabled : true,
     });
   }
 
@@ -37,7 +39,7 @@ export function normalizeResponseHeaders(headers: unknown): ResponseHeader[] {
 
 export function getActiveResponseHeaders(headers: ResponseHeader[]): { name: string; value: string }[] {
   return normalizeResponseHeaders(headers)
-    .filter((header) => header.key && header.value)
+    .filter((header) => header.enabled && header.key && header.value)
     .map((header) => ({ name: header.key, value: header.value }));
 }
 
@@ -66,12 +68,12 @@ export function omitCopiedResponseHeaders(headers: ResponseHeader[]): ResponseHe
 }
 
 export function isJsonContentType(headers: ResponseHeader[]): boolean {
-  const contentType = headers.find((header) => header.key.toLowerCase() === 'content-type')?.value ?? '';
+  const contentType = headers.find((header) => header.enabled && header.key.toLowerCase() === 'content-type')?.value ?? '';
   return contentType.includes('application/json');
 }
 
 export function parseResponseHeadersFromRecord(headers: Record<string, string> | undefined): ResponseHeader[] {
   if (!headers) return [];
 
-  return Object.entries(headers).map(([key, value]) => ({ key, value }));
+  return Object.entries(headers).map(([key, value]) => ({ key, value, enabled: true }));
 }

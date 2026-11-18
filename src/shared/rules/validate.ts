@@ -30,6 +30,10 @@ function collectHeadersValidationErrors(headers: unknown, fieldName: string, lab
     if (typeof header.value !== 'string') {
       errors.push(`${label}: ${fieldName}[${headerIndex}].value must be a string.`);
     }
+
+    if (header.enabled !== undefined && typeof header.enabled !== 'boolean') {
+      errors.push(`${label}: ${fieldName}[${headerIndex}].enabled must be a boolean.`);
+    }
   });
 
   return errors;
@@ -57,9 +61,7 @@ export function collectMockRuleValidationErrors(rule: unknown, index: number): s
 
   if (rule.method !== undefined) {
     if (typeof rule.method !== 'string' || !isHttpMethod(rule.method)) {
-      errors.push(
-        `${label}: "method" must be one of ${HTTP_METHODS.join(', ')} (got ${JSON.stringify(rule.method)}).`,
-      );
+      errors.push(`${label}: "method" must be one of ${HTTP_METHODS.join(', ')} (got ${JSON.stringify(rule.method)}).`);
     }
   }
 
@@ -93,9 +95,7 @@ export function collectMockRuleValidationErrors(rule: unknown, index: number): s
 
   if (rule.modifyType !== undefined) {
     if (typeof rule.modifyType !== 'string' || !isModifyType(rule.modifyType)) {
-      errors.push(
-        `${label}: "modifyType" must be one of ${MODIFY_TYPES.join(', ')} (got ${JSON.stringify(rule.modifyType)}).`,
-      );
+      errors.push(`${label}: "modifyType" must be one of ${MODIFY_TYPES.join(', ')} (got ${JSON.stringify(rule.modifyType)}).`);
     }
   }
 
